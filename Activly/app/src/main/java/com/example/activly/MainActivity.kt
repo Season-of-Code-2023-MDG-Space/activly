@@ -1,18 +1,47 @@
 package com.example.activly
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import com.example.activly.NotificationService as Notif
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), MyListener{
+    override var default_notification_channel_id: Any = ""
+    private var NOTIFICATION_CHANNEL_ID = "10001"
+    override fun setValue(notifmessage: String?) {
+        Log.i("", "setval")
+        if (notifmessage != null) {
+            Log.i("MESSAGE>>>>>", notifmessage)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Notif().setListener(this)
+        val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.i("","hi****************")
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val notificationChannel = NotificationChannel(NOTIFICATION_CHANNEL_ID, "NOTIFICATION_CHANNEL_NAME", importance)
+//            mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID)
+            mNotificationManager.createNotificationChannel(notificationChannel)
+        }
+//        mNotificationManager.notify(System.currentTimeMillis().toInt())
+
         var bt1 = findViewById<Button>(R.id.loginbtn)
         bt1.setOnClickListener {
             val username: String=findViewById<EditText>(R.id.login_username).text.toString()
