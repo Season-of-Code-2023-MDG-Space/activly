@@ -11,28 +11,59 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.activly.databinding.ActivityLoginpageBinding
+import com.google.firebase.auth.FirebaseAuth
 
 
 class Loginpage : AppCompatActivity() {
+    private lateinit var binding: ActivityLoginpageBinding
+    private lateinit var firebaseAuth: FirebaseAuth
     var name: EditText? = null
     var branch: EditText? = null
     var yr: EditText? = null
     var num: EditText? = null
     var email: EditText? = null
+    var pass: EditText? =null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        binding = ActivityLoginpageBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         setContentView(R.layout.activity_loginpage)
         name = findViewById<EditText>(R.id.editTextTextPersonName)
         branch = findViewById<EditText>(R.id.editTextTextPersonName2)
         yr = findViewById<EditText>(R.id.editTextNumber)
         num=findViewById<EditText>(R.id.editTextNumber2)
         email = findViewById<EditText>(R.id.editTextTextEmailAddress)
+        pass = findViewById<EditText>(R.id.editTextTextPassword)
         var btn = findViewById<Button>(R.id.button)
+
+        firebaseAuth = FirebaseAuth.getInstance()
+
+//        binding.textView.setOnClickListener {
+//            val intent = Intent(this, SignInActivity::class.java)
+//            startActivity(intent)
+//        }
+
         btn.setOnClickListener(View.OnClickListener {
             var ans : Boolean = checkDataEntered()
             if(ans==true){
-                val intent = Intent(this,PreferenceActivity::class.java)
-                startActivity(intent)
+                val email = findViewById<EditText>(R.id.editTextTextEmailAddress).text.toString()
+                val pass = findViewById<EditText>(R.id.editTextTextPassword).text.toString()
+                if (email.isNotEmpty() && pass.isNotEmpty()) {
+                    firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            val intent = Intent(this,PreferenceActivity::class.java)
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
+
+                        }
+                    }
+                } else {
+                    Toast.makeText(this, "Empty Fields Are not Allowed !!", Toast.LENGTH_SHORT).show()
+                }
             }
         })
     }
