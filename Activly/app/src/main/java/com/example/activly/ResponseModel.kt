@@ -1,4 +1,5 @@
 package com.example.activly
 
-class ResponseModel {
-}
+data class ResponseModel(
+    val reply: String
+)

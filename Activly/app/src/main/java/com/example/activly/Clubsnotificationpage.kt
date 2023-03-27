@@ -16,7 +16,7 @@ class Clubsnotificationpage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_clubsnotificationpage)
 
-        Log.i(this.javaClass.simpleName, "*******************************************************~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~sdsfacndandad")
+        Log.i(this.javaClass.simpleName, "***********************~~~~~~~~")
     }
 }
 

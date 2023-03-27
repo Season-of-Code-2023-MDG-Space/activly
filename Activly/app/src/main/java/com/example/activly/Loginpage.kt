@@ -5,6 +5,7 @@ package com.example.activly
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Button
@@ -13,6 +14,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.activly.databinding.ActivityLoginpageBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class Loginpage : AppCompatActivity() {
@@ -24,6 +27,7 @@ class Loginpage : AppCompatActivity() {
     var num: EditText? = null
     var email: EditText? = null
     var pass: EditText? =null
+    private var auth = Firebase.auth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,6 +45,7 @@ class Loginpage : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
+
 //        binding.textView.setOnClickListener {
 //            val intent = Intent(this, SignInActivity::class.java)
 //            startActivity(intent)
@@ -54,6 +59,9 @@ class Loginpage : AppCompatActivity() {
                 if (email.isNotEmpty() && pass.isNotEmpty()) {
                     firebaseAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
                         if (it.isSuccessful) {
+                            Log.i("USER", auth.currentUser.toString())
+                            // insert code to write user object to firestore
+                            // also send user obj to preference class
                             val intent = Intent(this,PreferenceActivity::class.java)
                             startActivity(intent)
                         } else {
